@@ -10,6 +10,7 @@ import numpy as np
 
 from arduino_io import ArduinoIO
 from cart import Cart
+from ultra96_io import Ultra96IO
 
 class Controller:
 	def __init__(self, params, sensors, motor):
@@ -65,17 +66,37 @@ class Controller:
 
 def main(argv):
 	parser = argparse.ArgumentParser()
-	parser.add_argument('--port', default='/dev/ttyACM0', help='Serial port')
-	parser.add_argument('--baud', default=115200, help='Baud rate')
-	parser.add_argument('--params', default='params.json', help='Parameter file')
+	subparsers = parser.add_subparsers(help='Sub-command help', dest='sensor_type')
+
+	parser_ard = subparsers.add_parser('arduino', help='Arduino configuration')
+	parser_ard.add_argument('--port', default='/dev/ttyACM0', help='Serial port')
+	parser_ard.add_argument('--baud', default=115200, help='Baud rate')
+	parser_ard.add_argument('--params', default='params.json', help='Parameter file')
+
+	parser_u96 = subparsers.add_parser('ultra96', help='Ultra96 configuration')
+	parser_u96.add_argument('--encoder1', default=0, help="First encoder's pin number")
+	parser_u96.add_argument('--encoder2', default=1, help="Second encoder's pin number")
+	parser_u96.add_argument('--motor1', default=508, help='First motor IO pin number')
+	parser_u96.add_argument('--motor2', default=509, help='Second motor IO pin number')
+	parser_u96.add_argument('--limit1', default=510, help='First limit switch IO pin number')
+	parser_u96.add_argument('--limit2', default=511, help='Second limit switch IO pin number')
+	parser_u96.add_argument('--params', default='params.json', help='Parameter file')
 
 	args = parser.parse_args(argv[1:])
-
+	if args.sensor_type is None:
+		print("Please specify a sensor/motor interface!")
+		exit(1)
+	
 	with open(args.params) as file:
 		params = json.load(file)
 
-	arduino = ArduinoIO(params, port=args.port, baud=args.baud)
-	controller = Controller(params, sensors=arduino, motor=arduino)
+	if args.sensor_type == 'arduino':
+		sensor_int = ArduinoIO(params, port=args.port, baud=args.baud)
+	else:
+		sensor_int = Ultra96IO(params, [args.encoder1, args.encoder2],
+				       [args.motor1, args.motor2], [args.limit1, args.limit2]) 
+
+	controller = Controller(params, sensors=sensor_int, motor=sensor_int)
 
 	try:
 		controller.setup()
@@ -85,7 +106,7 @@ def main(argv):
 		print(traceback.format_exc())
 
 	# Make sure to disable the motor before exiting
-	arduino.setMotorV(0)
+	sensor_int.setMotorV(0)
 
 	return 0
 

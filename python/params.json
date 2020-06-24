@@ -93,7 +93,7 @@
 		"val": "/sys/class/gpio"
 	},
 
-	"pwm_device_prefix" {
+	"pwm_device_prefix": {
 		"comment": "Path the PWM device interface",
 		"val": "/sys/class/pwm/pwmchip0"
 	},

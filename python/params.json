@@ -98,7 +98,7 @@
 		"val": "/sys/class/pwm/pwmchip0"
 	},
 
-	"iio_device_prefix" {
+	"iio_device_prefix": {
 		"comment": "Path to IIO device interface",
 		"val": "/sys/bus/iio/devices/iio:device"
 	}

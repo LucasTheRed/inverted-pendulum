@@ -65,6 +65,7 @@ class Controller:
 				break
 
 def main(argv):
+	print("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! THIS IS THE PYTHON SCRIPT !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
 	parser = argparse.ArgumentParser()
 	subparsers = parser.add_subparsers(help='Sub-command help', dest='sensor_type')
 

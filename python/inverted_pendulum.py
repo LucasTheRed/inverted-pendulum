@@ -76,13 +76,12 @@ def main(argv):
 
 	parser_u96 = subparsers.add_parser('ultra96', help='Ultra96 configuration')
 	parser_u96.add_argument('--encoder1', default=0, help="First encoder's pin number")
-
+	parser_u96.add_argument('--encoder2', default=1, help="Second encoder's pin number")
 	parser_u96.add_argument('--motor1', default=508, help='First motor IO pin number')
 	parser_u96.add_argument('--motor2', default=509, help='Second motor IO pin number')
 	parser_u96.add_argument('--limit1', default=510, help='First limit switch IO pin number')
 	parser_u96.add_argument('--limit2', default=511, help='Second limit switch IO pin number')
 	parser_u96.add_argument('--params', default='params.json', help='Parameter file')
-	parser_u96.add_argument('--gpio_device_prefix', default='/sys/class/gpio', help='GPIO device location')
 
 	args = parser.parse_args(argv[1:])
 	if args.sensor_type is None:

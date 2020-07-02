@@ -30,6 +30,7 @@ class Ultra96IO:
 
         # Prepare PWM for use
         self.__export_pin(self.params['pwm_device_prefix']['val'], 0)
+        self.__write_pwm_pin("period", 0, self.params['motor_pwm_period']['val')]
         self.setMotorV(0)
         self.__write_pwm_pin("enable", 0, 1)
 
@@ -64,7 +65,7 @@ class Ultra96IO:
             self.__set_motor_direction(1)
 
         # Set the duty cycle to achieve the proper voltage
-        self.__write_pwm_pin("duty_cycle", 0, abs(duty_cycle))
+        self.__write_pwm_pin("duty_cycle", 0, int(abs(duty_cycle)))
         
 
     def __export_pin(self, prefix, pin):

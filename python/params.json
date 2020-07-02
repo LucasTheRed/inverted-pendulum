@@ -31,7 +31,7 @@
 
 	"motor_pwm_period": {
 		"comment": "Period used for PWM on Ultra96",
-		"val": 525000,
+		"val": 526000,
 		"unit": "ns"
 	},
 

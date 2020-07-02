@@ -1,3 +1,5 @@
+import os
+
 class Ultra96IO:
     def __init__(self, params, encoder_pins=None, motor_pins=None, limit_pins=None):
 
@@ -19,20 +21,29 @@ class Ultra96IO:
         self.limit_pins = limit_pins
 
         # Prepare GPIO pins for use
-        self.__export_pin(self.params['gpio_device_prefix']['val'], self.motor_pins[0])
-        self.__export_pin(self.params['gpio_device_prefix']['val'], self.motor_pins[1])
+#        self.__export_pin(self.params['gpio_device_prefix']['val'], self.motor_pins[0])
+#        self.__export_pin(self.params['gpio_device_prefix']['val'], self.motor_pins[1])
         self.__export_pin(self.params['gpio_device_prefix']['val'], self.limit_pins[0])
         self.__export_pin(self.params['gpio_device_prefix']['val'], self.limit_pins[1])
-        self.__set_pin_direction(self.motor_pins[0], "out")
-        self.__set_pin_direction(self.motor_pins[1], "out")
+#        self.__set_pin_direction(self.motor_pins[0], "out")
+#        self.__set_pin_direction(self.motor_pins[1], "out")
         self.__set_pin_direction(self.limit_pins[0], "in")
         self.__set_pin_direction(self.limit_pins[1], "in")
-
         # Prepare PWM for use
-        self.__export_pin(self.params['pwm_device_prefix']['val'], 0)
-        self.__write_pwm_pin("period", 0, self.params['motor_pwm_period']['val')]
-        self.setMotorV(0)
-        self.__write_pwm_pin("enable", 0, 1)
+#        self.__export_pin(self.params['pwm_device_prefix']['val'], 0)
+#        self.__write_pwm_pin("period", 0, self.params['motor_pwm_period']['val')]
+#        self.setMotorV(0)
+#        self.__write_pwm_pin("enable", 0, 1)
+        os.system("echo 508 > /sys/class/gpio/export")
+        os.system("echo 509 > /sys/class/gpio/export")
+        os.system("echo out > /sys/class/gpio/gpio508/direction")
+        os.system("echo out > /sys/class/gpio/gpio509/direction")
+        os.system("echo 0 > /sys/class/pwm/pwmchip0/export")
+        os.system("echo 625000 > /sys/class/pwm/pwmchip0/pwm0/period")
+        os.system("echo 62500 > /sys/class/pwm/pwmchip0/pwm0/duty_cycle")
+        os.system("echo 1 > /sys/class/pwm/pwmchip0/pwm0/enable")
+        os.system("echo 1 > /sys/class/gpio/gpio508/value")
+        os.system("echo 0 > /sys/class/gpio/gpio509/value")
 
         # Save default values which will get overwritten soon enough
         self.encoder = [0.0, 0.0]

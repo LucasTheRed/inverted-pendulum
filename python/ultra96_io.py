@@ -31,7 +31,7 @@ class Ultra96IO:
         self.__set_pin_direction(self.limit_pins[1], "in")
         # Prepare PWM for use
 #        self.__export_pin(self.params['pwm_device_prefix']['val'], 0)
-#        self.__write_pwm_pin("period", 0, self.params['motor_pwm_period']['val')]
+#        self.__write_pwm_pin("period", 0, self.params['motor_pwm_period']['val'])
 #        self.setMotorV(0)
 #        self.__write_pwm_pin("enable", 0, 1)
         os.system("echo 508 > /sys/class/gpio/export")
@@ -74,6 +74,7 @@ class Ultra96IO:
             self.__set_motor_direction(-1)
         else:
             self.__set_motor_direction(1)
+        print("Setting motor voltage: " + str(voltage))
 
         # Set the duty cycle to achieve the proper voltage
         self.__write_pwm_pin("duty_cycle", 0, int(abs(duty_cycle)))
@@ -93,23 +94,27 @@ class Ultra96IO:
         handle = open(self.params['gpio_device_prefix']['val'] + "/gpio" + str(pin) + "/" + parameter, "r")
         ret = handle.read()
         handle.close()
+        print("Reading parameter " + str(parameter) + " from pin " + str(pin) + ": " + str(ret))
         return ret
 
     def __read_encoder_pin(self, parameter, pin):
         handle = open(self.params['iio_device_prefix']['val'] + str(pin) + "/" + parameter)
         ret = handle.read()
         handle.close()
+        print("Reading parameter " + str(parameter) + " from encoder pin " + str(pin) + ": " + str(ret))
         return ret
 
     def __write_pin(self, parameter, pin, value):
         handle = open(self.params['gpio_device_prefix']['val'] + "/gpio" + str(pin) + "/" + parameter, "w")
         print(str(value), file=handle)
         handle.close()
+        print("Writing parameter" + str(parameter) + " of pin " + str(pin) + ": " + str(value))
 
     def __write_pwm_pin(self, parameter, pin, value):
         handle = open(self.params['pwm_device_prefix']['val'] + "/pwm" + str(pin) + "/" + parameter, "w")
         print(str(value), file=handle)
         handle.close()
+        print("Writing parameter" + str(parameter) + " of PWM pin " + str(pin) + ": " + str(value))
 
     def __set_motor_direction(self, direction):
         outputs = [0, 0]

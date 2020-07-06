@@ -10,7 +10,7 @@ class Ultra96IO:
         if motor_pins is None:
             motor_pins = [508, 509]
         if limit_pins is None:
-            limit_pins = [510, 511]
+            limit_pins = [511, 510]
 
         self.encoder_scale = params["encoder_scale"]["val"]
         self.params = params
@@ -57,6 +57,7 @@ class Ultra96IO:
         self.encoder_offset[index] += offset
 
     def getSwitch(self, index):
+        print("Returning " + str(self.limit[index]) + " for switch " + str(index))
         return self.limit[index]
 
     def read(self):

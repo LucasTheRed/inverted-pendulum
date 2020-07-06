@@ -40,10 +40,14 @@ class Controller:
 
 	def setup(self):
 		# Initialize encoder positions
+		print("Initializing controller...")
 		self.cart.zeroTheta()
 		self.cart.findLimits()
+		print("Done initializing controller.")
 
 	def run(self):
+		print("Running controller...")
+		print("Centering cart...")
 		# Center the cart
 		self.cart.goTo(0.0)
 
@@ -51,6 +55,7 @@ class Controller:
 		self.cart.waitForPendulum()
 
 		# Control loop
+		print("Beginning control loop...")
 		self.last_time = time.time()
 		self.zeta = 0.0
 
@@ -79,8 +84,8 @@ def main(argv):
 	parser_u96.add_argument('--encoder2', default=1, help="Second encoder's pin number")
 	parser_u96.add_argument('--motor1', default=508, help='First motor IO pin number')
 	parser_u96.add_argument('--motor2', default=509, help='Second motor IO pin number')
-	parser_u96.add_argument('--limit1', default=510, help='First limit switch IO pin number')
-	parser_u96.add_argument('--limit2', default=511, help='Second limit switch IO pin number')
+	parser_u96.add_argument('--limit1', default=511, help='First limit switch IO pin number')
+	parser_u96.add_argument('--limit2', default=510, help='Second limit switch IO pin number')
 	parser_u96.add_argument('--params', default='params.json', help='Parameter file')
 
 	args = parser.parse_args(argv[1:])

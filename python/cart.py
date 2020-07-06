@@ -52,6 +52,7 @@ class Cart:
 		return self.sensors.getEncoder(0) * self.motor_angle_scale
 
 	def findLimits(self):
+		print("Begin finding track limits.")
 		self.sensors.read()
 
 		while not self.sensors.getSwitch(0):
@@ -74,6 +75,8 @@ class Cart:
 
 		# Limit is +/- about the origin
 		self.limit = (x_max - x_min) / 2
+
+		print("Done finding track limits.")
 
 	def zeroTheta(self):
 		self.sensors.read()
@@ -108,6 +111,7 @@ class Cart:
 		return True
 
 	def waitForPendulum(self):
+		print("Waiting for pendulum to be vertical...")
 		while True:
 			self.sensors.read()
 			theta = self._getTheta()
@@ -124,8 +128,10 @@ class Cart:
 
 			# Wait a bit
 			time.sleep(0.1)
+		print("Pendulum vertical.")
 
 	def resetState(self):
+		print("Resetting cart state")
 		self.sensors.read()
 
 		self.motor_vel = 0.0

@@ -6,7 +6,7 @@ class Ultra96IO:
         # Implement default list arguments this way so there aren't any problems
         # if the class is used multiple times
         if encoder_pins is None:
-            encoder_pins = [0, 1]
+            encoder_pins = [1, 0]
         if motor_pins is None:
             motor_pins = [508, 509]
         if limit_pins is None:
@@ -63,8 +63,8 @@ class Ultra96IO:
     def read(self):
         self.limit[0] = int(self.__read_pin("value", self.limit_pins[0]))
         self.limit[1] = int(self.__read_pin("value", self.limit_pins[1]))
-        self.encoder[0] = float(self.__read_encoder_pin("in_steps0_raw", 0))
-        self.encoder[1] = float(self.__read_encoder_pin("in_steps0_raw", 1))
+        self.encoder[0] = float(self.__read_encoder_pin("in_steps0_raw", self.encoder_pins[0])) / self.encoder_scale
+        self.encoder[1] = float(self.__read_encoder_pin("in_steps0_raw", self.encoder_pins[1])) / self.encoder_scale
 
     def setMotorV(self, voltage):
         # Determine which direction to turn the motor

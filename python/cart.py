@@ -56,13 +56,13 @@ class Cart:
 		self.sensors.read()
 
 		while not self.sensors.getSwitch(0):
-			self.motor.setMotorV(-5)
+			self.motor.setMotorV(5)
 			self.sensors.read()
 
 		x_min = self._getX()
 
 		while not self.sensors.getSwitch(1):
-			self.motor.setMotorV(5)
+			self.motor.setMotorV(-5)
 			self.sensors.read()
 
 		x_max = self._getX()
@@ -89,11 +89,11 @@ class Cart:
 		self.sensors.read()
 
 		while (self._getX() - position) < -0.01:
-			self.motor.setMotorV(5)
+			self.motor.setMotorV(-5)
 			self.sensors.read()
 
 		while (self._getX() - position) > 0.01:
-			self.motor.setMotorV(-5)
+			self.motor.setMotorV(5)
 			self.sensors.read()
 
 		self.motor.setMotorV(0)

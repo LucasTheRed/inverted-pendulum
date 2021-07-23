@@ -80,8 +80,8 @@ def main(argv):
 	parser_ard.add_argument('--params', default='params.json', help='Parameter file')
 
 	parser_u96 = subparsers.add_parser('ultra96', help='Ultra96 configuration')
-	parser_u96.add_argument('--encoder1', default=1, help="First encoder's pin number")
-	parser_u96.add_argument('--encoder2', default=0, help="Second encoder's pin number")
+	parser_u96.add_argument('--encoder1', default=0, help="First encoder's pin number")
+	parser_u96.add_argument('--encoder2', default=1, help="Second encoder's pin number")
 	parser_u96.add_argument('--motor1', default=508, help='First motor IO pin number')
 	parser_u96.add_argument('--motor2', default=509, help='Second motor IO pin number')
 	parser_u96.add_argument('--limit1', default=511, help='First limit switch IO pin number')
@@ -92,7 +92,7 @@ def main(argv):
 	if args.sensor_type is None:
 		print("Please specify a sensor/motor interface!")
 		exit(1)
-	
+
 	with open(args.params) as file:
 		params = json.load(file)
 
@@ -100,7 +100,7 @@ def main(argv):
 		sensor_int = ArduinoIO(params, port=args.port, baud=args.baud)
 	else:
 		sensor_int = Ultra96IO(params, [args.encoder1, args.encoder2],
-				       [args.motor1, args.motor2], [args.limit1, args.limit2]) 
+					[args.motor1, args.motor2], [args.limit1, args.limit2])
 
 	controller = Controller(params, sensors=sensor_int, motor=sensor_int)
 

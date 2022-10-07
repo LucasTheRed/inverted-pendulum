@@ -23,6 +23,18 @@
 		"unit": "m/tooth"
 	},
 
+	"motor_vcc_voltage": {
+		"comment": "Voltage of motor's VCC",
+		"val": 5,
+		"unit": "V"
+	},
+
+	"motor_pwm_period": {
+		"comment": "Period used for PWM on Ultra96",
+		"val": 526000,
+		"unit": "ns"
+	},
+
 	"motor_v_scale": {
 		"comment": "Motor voltage scale",
 		"val": 0.005862237,
@@ -74,5 +86,20 @@
 	"Khat": {
 		"comment": "State feedback gain matrix",
 		"val": [-29.7373, -3.4441, -8.7882, -5.4689, 7.9893]
+	},
+
+	"gpio_device_prefix": {
+		"comment": "Path to GPIO device interfaces",
+		"val": "/sys/class/gpio"
+	},
+
+	"pwm_device_prefix": {
+		"comment": "Path the PWM device interface",
+		"val": "/sys/class/pwm/pwmchip0"
+	},
+
+	"iio_device_prefix": {
+		"comment": "Path to IIO device interface",
+		"val": "/sys/bus/iio/devices/iio:device"
 	}
 }

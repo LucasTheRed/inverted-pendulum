@@ -52,7 +52,8 @@ class Controller:
 		self.cart.goTo(0.0)
 
 		# Wait for the pendulum to be moved into position by hand
-		self.cart.waitForPendulum()
+		if not self.cart.waitForPendulum():
+			self.setup()
 
 		# Control loop
 		print("Beginning control loop...")

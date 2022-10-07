@@ -110,6 +110,15 @@ class Cart:
 
 		return True
 
+	def checkBothButtons(self):
+		self.sensors.read()
+		if self.sensors.getSwitch(0) and self.sensors.getSwitch(1):
+			while True:
+				self.sensors.read()
+				if not self.sensors.getSwitch(0) and not self.sensors.getSwitch(1):
+					return True
+		return False
+
 	def waitForPendulum(self):
 		print("Waiting for pendulum to be vertical...")
 		while True:
@@ -120,6 +129,9 @@ class Cart:
 			if abs(theta) < (0.2 * self.start_angle):
 				break
 
+			if self.checkBothButtons():
+				return False
+
 			# Adjust if the pendulum started at the opposite side
 			if theta > (1.5 * self.start_angle):
 				self._setThetaOffset(-2.0 * self.start_angle)
@@ -128,7 +140,7 @@ class Cart:
 
 			# Wait a bit
 			time.sleep(0.1)
-		print("Pendulum vertical.")
+		return True
 
 	def resetState(self):
 		print("Resetting cart state")

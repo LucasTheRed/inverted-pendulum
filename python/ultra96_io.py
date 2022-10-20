@@ -6,7 +6,7 @@ class Ultra96IO:
 		# Implement default list arguments this way so there aren't any problems
 		# if the class is used multiple times
 		if encoder_pins is None:
-			encoder_pins = [0, 1]
+			encoder_pins = [1, 2]
 		if motor_pins is None:
 			motor_pins = [508, 509]
 		if limit_pins is None:
@@ -21,19 +21,19 @@ class Ultra96IO:
 		self.limit_pins = limit_pins
 
 		# Prepare GPIO pins for use
-#		self.__export_pin(self.params['gpio_device_prefix']['val'], self.motor_pins[0])
-#		self.__export_pin(self.params['gpio_device_prefix']['val'], self.motor_pins[1])
+		self.__export_pin(self.params['gpio_device_prefix']['val'], self.motor_pins[0])
+		self.__export_pin(self.params['gpio_device_prefix']['val'], self.motor_pins[1])
 		self.__export_pin(self.params['gpio_device_prefix']['val'], self.limit_pins[0])
 		self.__export_pin(self.params['gpio_device_prefix']['val'], self.limit_pins[1])
-#		self.__set_pin_direction(self.motor_pins[0], "out")
-#		self.__set_pin_direction(self.motor_pins[1], "out")
+		self.__set_pin_direction(self.motor_pins[0], "out")
+		self.__set_pin_direction(self.motor_pins[1], "out")
 		self.__set_pin_direction(self.limit_pins[0], "in")
 		self.__set_pin_direction(self.limit_pins[1], "in")
 		# Prepare PWM for use
-#		self.__export_pin(self.params['pwm_device_prefix']['val'], 0)
-#		self.__write_pwm_pin("period", 0, self.params['motor_pwm_period']['val'])
-#		self.setMotorV(0)
-#		self.__write_pwm_pin("enable", 0, 1)
+		self.__export_pin(self.params['pwm_device_prefix']['val'], 0)
+		self.__write_pwm_pin("period", 0, self.params['motor_pwm_period']['val'])
+		self.setMotorV(0)
+		self.__write_pwm_pin("enable", 0, 1)
 		os.system("echo 508 > /sys/class/gpio/export")
 		os.system("echo 509 > /sys/class/gpio/export")
 		os.system("echo out > /sys/class/gpio/gpio508/direction")
@@ -85,40 +85,34 @@ class Ultra96IO:
 
 
 	def __export_pin(self, prefix, pin):
-		handle = open(prefix + "/export", "w")
-		print(str(pin), file=handle)
-		handle.close()
+		with open(prefix + "/export", "w") as handle:
+			print(str(pin), file=handle)
 
 	def __set_pin_direction(self, pin, direction):
-		handle = open(self.params['gpio_device_prefix']['val'] + "/gpio" + str(pin) + "/direction", "w")
-		print(direction, file=handle)
-		handle.close()
+		with open(self.params['gpio_device_prefix']['val'] + "/gpio" + str(pin) + "/direction", "w") as handle:
+			print(direction, file=handle)
 
 	def __read_pin(self, parameter, pin):
-		handle = open(self.params['gpio_device_prefix']['val'] + "/gpio" + str(pin) + "/" + parameter, "r")
-		ret = handle.read()
-		handle.close()
-#		print("Reading parameter " + str(parameter) + " from pin " + str(pin) + ": " + str(ret))
+		with open(self.params['gpio_device_prefix']['val'] + "/gpio" + str(pin) + "/" + parameter, "r") as handle:
+			ret = handle.read()
+		print("Reading parameter " + str(parameter) + " from pin " + str(pin) + ": " + str(ret))
 		return ret
 
 	def __read_encoder_pin(self, parameter, pin):
-		handle = open(self.params['iio_device_prefix']['val'] + str(pin) + "/" + parameter)
-		ret = handle.read()
-		handle.close()
-#		print("Reading parameter " + str(parameter) + " from encoder pin " + str(pin) + ": " + str(ret))
+		with open(self.params['iio_device_prefix']['val'] + str(pin) + "/" + parameter) as handle:
+			ret = handle.read()
+		print("Reading parameter " + str(parameter) + " from encoder pin " + str(pin) + ": " + str(ret))
 		return ret
 
 	def __write_pin(self, parameter, pin, value):
-		handle = open(self.params['gpio_device_prefix']['val'] + "/gpio" + str(pin) + "/" + parameter, "w")
-		print(str(value), file=handle)
-		handle.close()
-#		print("Writing parameter" + str(parameter) + " of pin " + str(pin) + ": " + str(value))
+		with open(self.params['gpio_device_prefix']['val'] + "/gpio" + str(pin) + "/" + parameter, "w") as handle:
+			print(str(value), file=handle)
+		print("Writing parameter" + str(parameter) + " of pin " + str(pin) + ": " + str(value))
 
 	def __write_pwm_pin(self, parameter, pin, value):
-		handle = open(self.params['pwm_device_prefix']['val'] + "/pwm" + str(pin) + "/" + parameter, "w")
-		print(str(value), file=handle)
-		handle.close()
-#		print("Writing parameter" + str(parameter) + " of PWM pin " + str(pin) + ": " + str(value))
+		with open(self.params['pwm_device_prefix']['val'] + "/pwm" + str(pin) + "/" + parameter, "w") as handle:
+			print(str(value), file=handle)
+		print("Writing parameter" + str(parameter) + " of PWM pin " + str(pin) + ": " + str(value))
 
 	def __set_motor_direction(self, direction):
 		outputs = [0, 0]
